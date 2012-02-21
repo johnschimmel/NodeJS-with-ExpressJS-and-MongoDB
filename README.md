@@ -30,15 +30,19 @@ Install all the Node dependencies listed in package.json run the following comma
 
 ---------------
 
-To run locally and deploy to Heroku follow the instructions here http://devcenter.heroku.com/articles/node-js
-* Install Heroku toolbelt if you do not already have it installed
-* Create a new App on Heroku with the following command
+To deploy to Heroku and use the Heroku Add-on services we need to have an App created. Follow the instructions here http://devcenter.heroku.com/articles/node-js
+
+*   Install Heroku toolbelt if you do not already have it installed
+*   Create a new App on Heroku with the following command
 
     heroku create --stack cedar
 
 This creates a new App on Heroku and adds a remote path to your Git repository.
 
 ---------------
+
+
+## Add and configure MongoLabs
 
 ### Add the MongoLabs add-ons
 To add MongoLabs as your MongoDB provider run the following command in terminal. This will add the free starter plan MongoLabs offers to Heroku users. Be sure you have verified your Heroku account http://www.heroku.com/verify
@@ -49,6 +53,11 @@ Next, we need to get the username, password and database URI that MongoLabs has 
 
     heroku config | grep MONGOLAB_URI
     
+This will return your MongoLabs connection string
+
+    MONGOLAB_URI => mongodb://username:password@host:port/database
+
+
 
 ### Create environment configuration file
 We need to create a new file name **.env** this will hold the MongoLabs information. This will allow you to use the Environment variables in your code, this is good for keeping your username and password out of your code. 
@@ -69,7 +78,8 @@ You can access environment variables in your NodeJS code, for example in **web.j
 
 -------------
 
-### Mongoose - MongoDB library
+
+## Mongoose - MongoDB library
 
 We will be using Mongoose library to connect to our database. Mongoose must be required at the top of your **web.js** file.
 

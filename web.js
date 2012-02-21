@@ -4,18 +4,18 @@ var ejs = require('ejs'); //embedded javascript template engine
 var app = express.createServer(express.logger());
 
 var mongoose = require('mongoose'); // include Mongoose MongoDB library
-var schema = mongoose.Schema;
+var schema = mongoose.Schema; 
 
-// Configure DB
-app.db = mongoose.connect(process.env.MONGOLAB_URI); //local dev uses .env file
+/************ DATABASE CONFIGURATION **********/
+app.db = mongoose.connect(process.env.MONGOLAB_URI); //connect to the mongolabs database - local server uses .env file
 
-// Database Schema Setup
+// include the database model / schema
 require('./models').configureSchema(schema, mongoose);
 
-//Models
+// Define your DB Model variables
 var BlogPost = mongoose.model('BlogPost');
 var Comment = mongoose.model('Comment');
-
+/************* END DATABASE CONFIGURATION *********/
 
 /*********** SERVER CONFIGURATION *****************/
 app.configure(function() {
