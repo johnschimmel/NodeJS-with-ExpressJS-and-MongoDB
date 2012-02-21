@@ -46,6 +46,51 @@
     </fieldset>
 </form>
 
-<script>
 
-</script>
+<!-- THIS SECTION IS FOR INSTRUCTIONAL PURPOSES -->
+<div class="row">
+
+    <div class="span10">
+        <h3>Code sample - how a new blog post is POSTed to the server</h3>
+        <pre>
+// Display the new blog post form
+// access this route with /new-entry
+
+app.get('/new-entry',function(request, response){
+
+    //display the blog post entry form
+    response.render('blog_post_entry_form.html');
+
+});
+
+
+// User has submitted a new blog entry. It is POST'd to the server.
+app.post('/new-entry', function(request, response){
+
+    // Prepare the blog post entry form into a data object
+    var blogPostData = {
+        title : request.body.title,
+        urlslug : request.body.urlslug,
+        content : request.body.content,
+        author : {
+            name : request.body.name,
+            email : request.body.email
+        }
+    };
+
+    // create a new blog post
+    // BlogPost is a Mongoose data model and defined at the top of web.js
+    // BlogPost can accept a data object that is defined in model.js
+    var post = new BlogPost(blogPostData);
+
+    // save the blog post entry - that's it.
+    post.save();
+
+    // redirect to show the single post
+    response.redirect('/entry/' + blogPostData.urlslug); // for example /entry/this-is-a-post
+
+});
+        </pre>
+    </div>
+
+</div>

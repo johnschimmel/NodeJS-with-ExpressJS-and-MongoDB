@@ -64,3 +64,36 @@
     </div>
     
 </div>
+
+<!-- THIS SECTION IS FOR INSTRUCTIONAL PURPOSES -->
+<div class="row">
+
+    <div class="span10">
+        <h3>Code sample - how a single blog post is displayed</h3>
+        <pre>
+// Display a single blog post
+// A user might request /entry/this-blog-is-great
+//
+// this-blog-is-great will be the variable :urlslug => request.params.urlslug
+
+app.get('/entry/:urlslug',function(request, response){
+
+    // Get the request blog post by urlslug
+    BlogPost.findOne({urlslug:request.params.urlslug},function(err,post){
+        if (err) {
+            console.log('error');
+            console.log(err);
+            response.send("uh oh, can't find that post");
+        }
+
+        // use different layout for single entry view
+        post.layout = 'layout_single_entry.html';
+
+        // found the blogpost
+        response.render('blog_single_entry.html', post);
+    });
+});
+        </pre>
+    </div>
+
+</div>

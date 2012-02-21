@@ -17,6 +17,7 @@ var BlogPost = mongoose.model('BlogPost');
 var Comment = mongoose.model('Comment');
 /************* END DATABASE CONFIGURATION *********/
 
+
 /*********** SERVER CONFIGURATION *****************/
 app.configure(function() {
     
@@ -54,16 +55,24 @@ app.configure(function() {
 });
 /*********** END SERVER CONFIGURATION *****************/
 
-// main page - display the card form
+
+
+// main page - display all blog posts
+// More Mongoose query information here - http://mongoosejs.com/docs/finding-documents.html
 app.get('/', function(request, response) {
 
+    // build the query
     var query = BlogPost.find({});
-    query.sort('date',-1);
+    query.sort('date',-1); //sort by date in descending order
     
+    // run the query and display blog_main.html template if successful
     query.exec({}, function(err, allPosts){
+        
+        // prepare template data
         templateData = {
             posts : allPosts
         };
+        
         // render the card_form template with the data above
         response.render('blog_main.html', templateData);
         
