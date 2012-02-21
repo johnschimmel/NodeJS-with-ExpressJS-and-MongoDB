@@ -1,31 +1,29 @@
-This project is a demo for the Dynamic Web Development class at ITP/NYU
+This code demonstrates how to use ExpressJS Node Framework with MongoDB on Heroku
 
-It demonstrates using ExpressJS framework with NodeJS for a multi-page website. The web app uses EJS as a template language. 
+### Clone this repository
 
-- Template files are in the /views folder.
-- Static files are in the /static folder
+OR 
 
-Before running locally run the command 
-npm install
+### Download Zip file
+In terminal run the following commands in this directory to create the Git repository
 
-this will install all dependencies in the package.json file.
-
-To run locally, navigate to the code directory in Terminal, run 
-node web.js
-
-Visit the site on your browser at http://localhost:3000
+    git init
+    git add .
+    git commit -am "init commit"
 
 
+Install all the Node dependencies listed in package.json run the following command in Terminal
 
-Routes 
+    npm install
 
-GET  / renders the /views/card_form.html
-POST / renders the saves card data to a javascript array for later retrieval. Redirects to /card/:cardNumber
+To run locally and deploy to Heroku follow the instructions here http://devcenter.heroku.com/articles/node-js
+* Install Heroku toolbelt if you do not already have it installed
+* Create a new App on Heroku with the following command
 
-GET /card/:cardNumber pulls a specific card from the cardData array and renders the /views/card_display.html.
+    heroku create --stack cedar
 
-GET /notfancy demonstrates template rendering without a layout
+This creates a new App on Heroku and adds a remote path to your Git repository.
 
+### Add the MongoLabs add-ons to your Heroku account
 
-The files were created from the Heroku tutorial, "Getting Started with Node.js on Heroku/Cedar" http://devcenter.heroku.com/articles/node-js
 
