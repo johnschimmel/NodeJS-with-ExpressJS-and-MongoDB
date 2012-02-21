@@ -14,7 +14,7 @@ In terminal run the following commands in this directory to create the Git repos
     git commit -am "init commit"
 
 ### .gitignore
-Create .gitignore file and put the following into it
+Create **.gitignore** file. Place the following text into the file and save.
 
     node_modules
     .env
@@ -49,8 +49,16 @@ Next we need to get the username, password and database URI that MongoLabs has s
 
     heroku config | grep MONGOLAB_URI
     
+
 ### Create environment configuration file
-Create a new blank file called
-Create a new 
+We need to create a new file name **.env** this will hold the MongoLabs information. This will allow you to use the Environment variables in your code, this is good for keeping your username and password out of your code. 
 
+Copy the string from the previous Terminal command, copy all text after **=>** . It should look similar to this,
 
+    mongodb://username:password@host:port/database
+
+In your **.env** file, create a variable for **MONGOLAB_URI=** append it with the string you copied
+
+    MONGOLAB_URI=mongodb://username:password@host:port/database
+    
+Save the file. 
