@@ -98,3 +98,56 @@ app.get('/entry/:urlslug',function(request, response){
     </div>
 
 </div>
+
+
+<div class="row">
+
+    <div class="span10">
+        <h3>Code sample - how a comment is POST'd to the server</h3>
+        <pre>
+// web.js
+// add a comment to a blog post
+
+app.post('/comment', function(request, response){
+    
+    // get the comment form's hidden value - urlslug
+    var urlslug = request.body.urlslug;
+    
+    // Query for the blog post with matching urlslug
+    BlogPost.findOne({urlslug:urlslug}, function(err,post){
+        
+        // if there was an error...
+        if (err) {
+            console.log('There was an error');
+            console.log(err);
+            
+            // display message to user
+            response.send("uh oh, can't find that post"); 
+        }
+        
+        // Prepare, save and redirect
+        
+        // prepare new comment for blog post with the form data
+        var commentData = {
+            name : request.body.name,
+            text : request.body.text
+        };
+        
+        // create new comment
+        var comment = new Comment(commentData);
+        
+        // append the comment to the comment list
+        post.comments.push(comment);
+        post.save();
+        
+        // redirect to the blog entry
+        response.redirect('/entry/' + urlslug);
+
+    });
+    
+});
+        </pre>
+    </div>
+
+</div>
+
