@@ -45,7 +45,7 @@ To add MongoLabs as your MongoDB provider run the following command in terminal.
 
     heroku addons:add mongolab:starter
     
-Next we need to get the username, password and database URI that MongoLabs has supplied us. Heroku keeps this in the a configuration file. Run the following,
+Next, we need to get the username, password and database URI that MongoLabs has supplied us. Heroku keeps this in the a configuration file. Run the following,
 
     heroku config | grep MONGOLAB_URI
     
@@ -62,3 +62,37 @@ In your **.env** file, create a variable for **MONGOLAB_URI=** append it with th
     MONGOLAB_URI=mongodb://username:password@host:port/database
     
 Save the file. 
+
+You can access environment variables in your NodeJS code, for example in **web.js** as follows,
+
+    process.env.MONGOLAB_URI // this is the same as manually entering 'mongodb://username:password@host:port/database'
+
+-------------
+
+### Mongoose - MongoDB library
+
+We will be using Mongoose library to connect to our database. Mongoose must be required at the top of your **web.js** file.
+
+    var express = require('express'); 
+    var ejs = require('ejs'); //embedded javascript template engine
+
+    var app = express.createServer(express.logger());
+
+    var mongoose = require('mongoose'); // include Mongoose MongoDB library
+    var schema = mongoose.Schema; 
+
+    /************ DATABASE CONFIGURATION **********/
+    app.db = mongoose.connect(process.env.MONGOLAB_URI); //connect to the mongolabs database - local server uses .env file
+
+    // include the database model / schema
+    require('./models').configureSchema(schema, mongoose);
+
+    // Define your DB Model variables
+    var BlogPost = mongoose.model('BlogPost');
+    var Comment = mongoose.model('Comment');
+    /************* END DATABASE CONFIGURATION *********/
+
+### Models and Schema - models.js
+
+There is a new file called **models.js**, this includes the data definitions or schema for your database. You will define what data you will be saving in your Mongo collection. See the Mongoose web site for more information, http://mongoosejs.com/
+

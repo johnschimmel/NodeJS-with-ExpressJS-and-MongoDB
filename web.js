@@ -1,16 +1,25 @@
 var express = require('express'); 
 var ejs = require('ejs'); //embedded javascript template engine
 
+var app = express.createServer(express.logger());
+
 var mongoose = require('mongoose'); // include Mongoose MongoDB library
 var schema = mongoose.Schema;
 
-var app = express.createServer(express.logger());
+// Configure DB
+app.db = mongoose.connect(process.env.MONGOLAB_URI); //local dev uses .env file
+
+// Database Schema Setup
+require('./models').configureSchema(schema, mongoose);
+
+//Models
+var BlogPost = mongoose.model('BlogPost');
+var Comment = mongoose.model('Comment');
+
 
 /*********** SERVER CONFIGURATION *****************/
 app.configure(function() {
     
-    // Configure DB
-    app.db = mongoose.connect(process.env.MONGOLAB_URI); //local dev uses .env file
     
     /*********************************************************************************
         Configure the template engine
@@ -166,15 +175,6 @@ app.post('/new-entry', function(request, response){
 
 
 
-
-
-
-// Database Schema Setup
-require('./models').configureSchema(schema, mongoose);
-
-//Models
-var BlogPost = mongoose.model('BlogPost');
-var Comment = mongoose.model('Comment');
 
 
 
