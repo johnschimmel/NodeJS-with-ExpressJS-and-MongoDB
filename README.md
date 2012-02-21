@@ -79,9 +79,11 @@ You can access environment variables in your NodeJS code, for example in **web.j
 -------------
 
 
-## Mongoose - MongoDB library
+## Mongoose - MongoDB node module
 
-We will be using Mongoose library to connect to our database. Mongoose must be required at the top of your **web.js** file.
+We will be using Mongoose library to connect to our database. Update your **web.js** file to include Mongoose module and database configuration.
+
+**web.js**
 
     var express = require('express'); 
     var ejs = require('ejs'); //embedded javascript template engine
