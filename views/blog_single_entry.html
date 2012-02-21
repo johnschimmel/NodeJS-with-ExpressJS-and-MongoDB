@@ -1,0 +1,66 @@
+<div class="row">
+
+    <div class="span12">
+
+        <h2><%= title %></h2>
+        <small>By <a href="mailto:<%= author.email %>"><%= author.name %></a></small>
+    
+        <br /><br />
+    
+        <p>
+            <%= content %>
+        </p>
+        <hr />
+    </div>
+</div>
+
+<!-- COMMENT FORM -->
+<div class="row">
+    <div class="span6">
+        <% if (comments.length == 0) { %>
+            <b>No comments</b>
+        <% } else { %>
+            <h3>Comments</h3>
+
+        <% } %>
+        <% for(i=0; i<comments.length; i++) { %>
+        <div class="comment">
+            <p>
+                <b><%= comments[i].name %> said</b><br>
+                <%= comments[i].text %>
+                <br>
+                <small><%= comments[i].date %></small>
+            </p>
+        </div>
+        <% } %>
+    </div>
+    
+    
+    <div class="span6">
+        <form class="form-horizontal" method="POST" action="/comment">
+            <fieldset>
+                <legend>Add a comment</legend>
+
+                <div class="control-group">
+                    <label class="control-label" for="name">Your name</label>
+                    <div class="controls">
+                        <input type="text" name="name" id="name">
+                    </div>
+                </div>
+
+                <div class="control-group">
+                    <label class="control-label" for="text">Comment</label>
+                    <div class="controls">
+                        <textarea class="input-xlarge" id="text" name="text" rows="6" cols="50"></textarea>
+                    </div>
+                </div>
+
+                <div class="form-actions">
+                    <input type="hidden" value="<%= urlslug %>" name="urlslug">
+                    <button type="submit" class="btn btn-primary">Comment</button>
+                </div>
+            </fieldset>
+        </form>
+    </div>
+    
+</div>

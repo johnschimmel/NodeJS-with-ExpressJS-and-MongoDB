@@ -1,0 +1,17 @@
+body { 
+    background: #fff;
+}
+
+a { 
+    color: #00c;
+    text-decoration: underline;
+}
+
+
+input { height: 18px;}
+
+textarea {
+    width:610px;
+    height:200px;
+}
+

@@ -1,0 +1,9 @@
+{
+  "name": "express_w_mongodb",
+  "version": "0.0.1",
+  "dependencies": {
+    "express": "2.5.6",
+    "mongoose" : "2.5.6",
+    "ejs" : "latest"
+  }
+}

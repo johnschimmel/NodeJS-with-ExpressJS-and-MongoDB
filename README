@@ -1,0 +1,31 @@
+This project is a demo for the Dynamic Web Development class at ITP/NYU
+
+It demonstrates using ExpressJS framework with NodeJS for a multi-page website. The web app uses EJS as a template language. 
+
+- Template files are in the /views folder.
+- Static files are in the /static folder
+
+Before running locally run the command 
+npm install
+
+this will install all dependencies in the package.json file.
+
+To run locally, navigate to the code directory in Terminal, run 
+node web.js
+
+Visit the site on your browser at http://localhost:3000
+
+
+
+Routes 
+
+GET  / renders the /views/card_form.html
+POST / renders the saves card data to a javascript array for later retrieval. Redirects to /card/:cardNumber
+
+GET /card/:cardNumber pulls a specific card from the cardData array and renders the /views/card_display.html.
+
+GET /notfancy demonstrates template rendering without a layout
+
+
+The files were created from the Heroku tutorial, "Getting Started with Node.js on Heroku/Cedar" http://devcenter.heroku.com/articles/node-js
+
