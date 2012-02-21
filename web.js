@@ -49,7 +49,7 @@ app.configure(function() {
 app.get('/', function(request, response) {
 
     var query = BlogPost.find({});
-    query.sort('date',1);
+    query.sort('date',-1);
     
     query.exec({}, function(err, allPosts){
         templateData = {
