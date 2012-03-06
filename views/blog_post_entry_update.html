@@ -1,0 +1,152 @@
+<% if (updated) { %>
+    <br>
+    <div class="alert alert-success">
+        Blog post updated successfully - <a href="/entryById/<%= blogpost._id %>">View post</a>
+    </div>
+<% } %>
+
+
+<form class="form-horizontal" method="POST" action="/update">
+    
+    <!-- include the blog post _id as a hidden value -->
+    <input type="hidden" name="blog_post_id" value="<%= blogpost._id %>">
+    
+    <fieldset>
+        <legend>Blog Post Entry Form</legend>
+        <div class="control-group">
+            <label class="control-label" for="title">Title</label>
+            <div class="controls">
+                <input type="text" name="title" id="title" value="<%= blogpost.title %>">
+            </div>
+        </div>
+
+        <div class="control-group">
+            <label class="control-label" for="urlslug">URL Slug</label>
+            <div class="controls">
+                <input type="text" disabled class="input-medium" name="urlslug" id="urlslug" value="<%= blogpost.urlslug %>">
+                <p class="help-block">The url slug for this blog entry, the ending of the URL. ie 'http://localhost:5000/entry/<b><u>the-itp-story</u></b>'</p>
+            </div>
+        </div>
+
+        <div class="control-group">
+            <label class="control-label" for="content">Entry content</label>
+            <div class="controls">
+                <textarea class="input-xlarge" id="content" name="content" rows="6" cols="50"><%= blogpost.content %></textarea>
+            </div>
+        </div>
+        
+        <hr />
+        
+        <div class="control-group">
+            <label class="control-label" for="title">Author name</label>
+            <div class="controls">
+                <input type="text" name="name" id="name"  value="<%= blogpost.author.name %>">
+            </div>
+        </div>
+        
+        <div class="control-group">
+            <label class="control-label" for="title">Author email</label>
+            <div class="controls">
+                <input type="text" name="email" id="email"  value="<%= blogpost.author.email %>">
+            </div>
+        </div>
+        
+        <div class="form-actions">
+            <button type="submit" class="btn btn-primary">Update entry</button>
+            <button class="btn">Cancel</button>
+        </div>
+    </fieldset>
+</form>
+
+
+<!-- THIS SECTION IS FOR INSTRUCTIONAL PURPOSES -->
+<div class="row">
+
+    <div class="span10">
+        <h3>Code sample - How to update a blog post</h3>
+        <pre>
+// web.js
+// how to update a blog post
+
+app.get("/update/:postId", function(request, response){
+    
+    // get the request blog post id
+    var requestedPostID = request.params.postId;
+    
+    // find the requested document
+    BlogPost.findById( requestedPostID, function(err, blogpost) {
+        
+        if (err) {
+            console.log(err);
+            response.send("an error occurred!");
+        }
+        
+        if (blogpost == null ) {
+            console.log('post not found');
+            response.send("uh oh, can't find that post");
+
+        } else {
+            
+            // prepare template data
+            // blogpost data & updated (was this entry updated ?update=true)
+            templateData = {
+                blogpost : blogpost,
+                updated : request.query.update
+            };
+            
+            // found the blogpost
+            response.render('blog_post_entry_update.html', templateData);
+        }
+        
+    })
+    
+});
+
+app.post("/update", function(request, response){
+    
+    // update post body should have form element called blog_post_id
+    var postid = request.body.blog_post_id;
+
+    // we are looking for the BlogPost document where _id == postid
+    var condition = { _id : postid };
+    
+    // update these fields with new values
+    var updatedData = {
+        title : request.body.title,
+        content : request.body.content,
+        author : {
+            name : request.body.name,
+            email : request.body.email
+        }
+    };
+    
+    // we only want to update a single document
+    var options = { multi : false };
+    
+    // Perform the document update
+    // find the document with 'condition'
+    // include data to update with 'updatedData'
+    // extra options - this time we only want a single doc to update
+    // after updating run the callback function - return err and numAffected
+    BlogPost.update( condition, updatedData, options, function(err, numAffected){
+        
+        if (err) {
+            console.log('Update Error Occurred');
+            response.send('Update Error Occurred ' + err);
+
+        } else {
+            
+            console.log("update succeeded");
+            console.log(numAffected + " document(s) updated");
+            
+            //redirect the user to the update page - append ?update=true to URL
+            response.redirect('/update/' + postid + "?update=true");
+            
+        }
+    });
+    
+})
+        </pre>
+    </div>
+
+</div>

@@ -86,19 +86,56 @@ app.get('/', function(request, response) {
 app.get('/entry/:urlslug',function(request, response){
     
     // Get the request blog post by urlslug
-    BlogPost.findOne({urlslug:request.params.urlslug},function(err,post){
+    BlogPost.findOne({ urlslug : request.params.urlslug },function(err, blogpost){
+        
         if (err) {
-            console.log('error');
             console.log(err);
-            response.send("uh oh, can't find that post");
+            response.send("an error occurred!");
         }
         
-        // use different layout for single entry view
-        post.layout = 'layout_single_entry.html';
+        if (blogpost == null ) {
+            console.log('post not found');
+            response.send("uh oh, can't find that post");
+
+        } else {
+
+            // use different layout for single entry view
+            blogpost.layout = 'layout_single_entry.html';
         
-        // found the blogpost
-        response.render('blog_single_entry.html', post);
+            // found the blogpost
+            response.render('blog_single_entry.html', blogpost);
+        }
     });
+});
+
+// .findById example
+// Get a blogpost by its unique objectId (._id)
+app.get("/entryById/:postId", function(request, response) {
+    
+    var requestedPostID = request.params.postId;
+    
+    BlogPost.findById( requestedPostID, function(err, blogpost) {
+        
+        if (err) {
+            console.log(err);
+            response.send("an error occurred!");
+        }
+        
+        if (blogpost == null ) {
+            console.log('post not found');
+            response.send("uh oh, can't find that post");
+
+        } else {
+
+            // use different layout for single entry view
+            blogpost.layout = 'layout_single_entry.html';
+        
+            // found the blogpost
+            response.render('blog_single_entry.html', blogpost);
+        }
+        
+    })
+    
 });
 
 
@@ -110,7 +147,6 @@ app.post('/comment', function(request, response){
     
     // Query for the blog post with matching urlslug
     BlogPost.findOne({urlslug:urlslug}, function(err,post){
-        
         // if there was an error...
         if (err) {
             console.log('There was an error');
@@ -182,10 +218,138 @@ app.post('/new-entry', function(request, response){
     
 });
 
+app.get("/recent", function(request, response){
+    
+    // create date variable for 7 days ago
+    var lastWeek = new Date();
+    lastWeek.setDate(-7);
+    
+    // query for all blog posts where the date is greater than or equal to 7 days ago
+    var query = BlogPost.find({ date : { $gte: lastWeek }});
+
+    query.sort('date',-1);
+    query.exec(function (err, recentPosts) {
+
+      
+      // prepare template data
+      templateData = {
+          posts : recentPosts
+      };
+      
+      // render the card_form template with the data above
+      response.render('recent_posts.html', templateData);
+      
+    });
+    
+});
+
+app.get("/entryById/:postId", function(request, response) {
+    
+    var requestedPostID = request.params.postId;
+    
+    BlogPost.findById( requestedPostID, function(err, blogpost) {
+        
+        if (err) {
+            console.log(err);
+            response.send("an error occurred!");
+        }
+        
+        if (blogpost == null ) {
+            console.log('post not found');
+            response.send("uh oh, can't find that post");
+
+        } else {
+
+            // use different layout for single entry view
+            blogpost.layout = 'layout_single_entry.html';
+        
+            // found the blogpost
+            response.render('blog_single_entry.html', blogpost);
+        }
+        
+    })
+    
+});
 
 
+app.get("/update/:postId", function(request, response){
+    
+    // get the request blog post id
+    var requestedPostID = request.params.postId;
+    
+    // find the requested document
+    BlogPost.findById( requestedPostID, function(err, blogpost) {
+        
+        if (err) {
+            console.log(err);
+            response.send("an error occurred!");
+        }
+        
+        if (blogpost == null ) {
+            console.log('post not found');
+            response.send("uh oh, can't find that post");
 
+        } else {
+            
+            // prepare template data
+            // blogpost data & updated (was this entry updated ?update=true)
+            templateData = {
+                blogpost : blogpost,
+                updated : request.query.update
+            };
+            
+            // found the blogpost
+            response.render('blog_post_entry_update.html', templateData);
+        }
+        
+    })
+    
+});
 
+app.post("/update", function(request, response){
+    
+    // update post body should have form element called blog_post_id
+    var postid = request.body.blog_post_id;
+
+    // we are looking for the BlogPost document where _id == postid
+    var condition = { _id : postid };
+    
+    // update these fields with new values
+    var updatedData = {
+        title : request.body.title,
+        content : request.body.content,
+        author : {
+            name : request.body.name,
+            email : request.body.email
+        }
+    };
+    
+    // we only want to update a single document
+    var options = { multi : false };
+    
+    // Perform the document update
+    // find the document with 'condition'
+    // include data to update with 'updatedData'
+    // extra options - this time we only want a single doc to update
+    // after updating run the callback function - return err and numAffected
+    BlogPost.update( condition, updatedData, options, function(err, numAffected){
+        
+        if (err) {
+            console.log('Update Error Occurred');
+            response.send('Update Error Occurred ' + err);
+
+        } else {
+            
+            console.log("update succeeded");
+            console.log(numAffected + " document(s) updated");
+            
+            //redirect the user to the update page - append ?update=true to URL
+            response.redirect('/update/' + postid + "?update=true");
+            
+        }
+    });
+    
+});
 
 
 // Make server turn on and listen at defined PORT (or port 3000 if is not defined)

@@ -3,7 +3,11 @@
     <div class="span12">
 
         <h2><%= title %></h2>
-        <small>By <a href="mailto:<%= author.email %>"><%= author.name %></a></small>
+        <small>
+            By <a href="mailto:<%= author.email %>"><%= author.name %></a>
+            &nbsp;
+            <a href="/update/<%= _id %>">edit</a>
+        </small>
     
         <br /><br />
     
@@ -95,8 +99,38 @@ app.get('/entry/:urlslug',function(request, response){
     });
 });
         </pre>
-    </div>
+  <br>
+  <h3>How to get blog post by _id</h3>
+        <pre>
+            app.get("/entryById/:postId", function(request, response) {
 
+                var requestedPostID = request.params.postId;
+
+                BlogPost.findById( requestedPostID, function(err, blogpost) {
+
+                    if (err) {
+                        console.log(err);
+                        response.send("an error occurred!");
+                    }
+
+                    if (blogpost == null ) {
+                        console.log('post not found');
+                        response.send("uh oh, can't find that post");
+
+                    } else {
+
+                        // use different layout for single entry view
+                        blogpost.layout = 'layout_single_entry.html';
+
+                        // found the blogpost
+                        response.render('blog_single_entry.html', blogpost);
+                    }
+
+                })
+
+            });
+        </pre>
+    </div>
 </div>
 
 

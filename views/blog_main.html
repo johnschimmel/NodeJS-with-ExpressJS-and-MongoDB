@@ -10,6 +10,11 @@
                 <%= posts[i].title %>
             </a>
         </h2>
+        <small>
+            <a href="/entryById/<%= posts[i]._id %>">View by objectId ( <%= posts[i]._id %>)</a>
+        </small>
+        <br>
+        
         <small>By <%= posts[i].author.name %> on <%= posts[i].date %></small>
         <hr />
         

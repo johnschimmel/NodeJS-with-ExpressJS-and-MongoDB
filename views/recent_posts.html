@@ -1,0 +1,60 @@
+<h1>Example blog made with MongoDB</h1>
+<br><br>
+<% for(i=0; i<posts.length; i++) { %>
+<div class="row">
+
+    <div class="span12">
+
+        <h2>
+            <a href="/entry/<%= posts[i].urlslug %>">
+                <%= posts[i].title %>
+            </a>
+        </h2>
+        <small>
+            <a href="/entryById/<%= posts[i]._id %>">View by objectId ( <%= posts[i]._id %>)</a>
+        </small>
+        <br>
+        
+        <small>By <%= posts[i].author.name %> on <%= posts[i].date %></small>
+        <hr />
+        
+    </div>
+</div>
+
+<% } %>
+
+
+<!-- THIS SECTION IS FOR INSTRUCTIONAL PURPOSES -->
+<div class="row">
+
+    <div class="span10">
+        <h3>Code sample - recent posts from the last week</h3>
+        <pre>
+            app.get("/recent", function(request, response){
+
+                // create date variable for 7 days ago
+                var lastWeek = new Date();
+                lastWeek.setDate(-7);
+
+                // query for all blog posts where the date is greater than or equal to 7 days ago
+                var query = BlogPost.find({ date : { $gte: lastWeek }});
+
+                query.sort('date',-1);
+                query.exec(function (err, recentPosts) {
+
+
+                  // prepare template data
+                  templateData = {
+                      posts : recentPosts
+                  };
+
+                  // render the card_form template with the data above
+                  response.render('recent_posts.html', templateData);
+
+                });
+
+            });
+        </pre>
+    </div>
+
+</div>
