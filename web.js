@@ -395,7 +395,7 @@ app.get('/jsontest',function(request, response) {
             //convert JSON into native javascript
             blogPostData = JSON.parse(data);
             
-            //if (blogPostData.status == "OK") {
+            if (blogPostData.status == "OK") {
                 posts = blogPostData.posts;
                 
                 //render template with remote data
@@ -405,12 +405,10 @@ app.get('/jsontest',function(request, response) {
                 }
             
                 response.render("remote_json_example.html",templateData)
-
-            //} else {
+            } else {
                 
-              //  response.send("BlogPostData status != 'OK'");
-                
-            //}
+                response.send("blog post JSON status != OK");
+            }
         }
     });
     
