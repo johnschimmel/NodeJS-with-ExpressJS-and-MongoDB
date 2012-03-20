@@ -380,6 +380,43 @@ app.get('/data/allposts', function(request, response){
     });
 });
 
+// This is a demonstration of using "remote" JSON data.
+app.get('/jsontest',function(request, response) {
+    
+    blogPostsURL= "http://dwd-mongodb.herokuapp.com/data/allposts"; //pretend this url is actually on another server
+    
+    requestURL(blogPostsURL, function(error, httpResponse, data) {
+        if (error) {
+            console.error(error);
+            response.send("uhoh there was an error");
+        }
+        if (httpResponse.statusCode == 200) {
+            
+            //convert JSON into native javascript
+            blogPostData = JSON.parse(data);
+            
+            //if (blogPostData.status == "OK") {
+                posts = blogPostData.posts;
+                
+                //render template with remote data
+                templateData = {
+                    blogposts : posts, 
+                    source_url : blogPostsURL   
+                }
+            
+                response.render("remote_json_example.html",templateData)
+
+            //} else {
+                
+              //  response.send("BlogPostData status != 'OK'");
+                
+            //}
+        }
+    });
+    
+})
+
+/************ YAHOO  WEATHER EXAMPLE **************/
 app.get('/weather', function(request, response){
     
     // default /weather request - redirect to /weather/NYC
