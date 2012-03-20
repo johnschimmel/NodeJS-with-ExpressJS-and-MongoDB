@@ -1,0 +1,49 @@
+<div class="row">
+    
+    <!-- LEFT COLUMN -->
+    <div class="span6">
+        <h1><%= weather.location.city %>
+            <img src="<%= weather.condition.image %>" alt="weather condition graphic : <%= weather.condition.text %>">
+        </h1>
+        
+        <hr>
+        
+        <ul>
+            <li>Temperature: 
+            <%= weather.condition.text %>
+            <%= weather.condition.temperature %> <%= weather.units.temperature %></li>
+            <li>Wind speed: <%= weather.wind.speed %><%= weather.units.speed %> <%= weather.wind.direction %></li>
+            <li>Visibility: <%= weather.atmosphere.visibility %><%= weather.units.distance %>
+        </ul>
+        
+        <hr>
+        
+        <ul>
+            <li>Sunrise: <%= weather.astronomy.sunrise %></li>
+            <li>Sunset: <%= weather.astronomy.sunset %></li>
+        </ul>
+        
+        <!-- location listing -->
+        <br><br>
+        <div class="well">
+            <h3>See weather in:</h3>
+            <% for(place in YAHOOLocations) { %>
+                <a href="/weather/<%= place %>"><%= place.toUpperCase() %></a> &nbsp;
+            <% } %>
+        </div>
+        
+        
+        
+    </div>
+    
+    <!-- RIGHT COLUMN -->
+    <div class="span6">
+        <h3>For example only, this is the JSON data from Yahoo</h3>
+        <pre><%= jsonFromYahoo %></pre>
+        <br>
+        requested url:<br>
+        <a href="<%= requestedURL %>" target="_new"><%= requestedURL %></a><br>
+        
+    </div>
+</div>
+

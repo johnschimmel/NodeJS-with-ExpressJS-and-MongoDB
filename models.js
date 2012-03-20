@@ -21,9 +21,6 @@ module.exports.configureSchema = function(Schema, mongoose) {
       }
     });
 
-
-    
-
     // add schemas to Mongoose
     mongoose.model('BlogPost', BlogPost);
     mongoose.model('Comment', Comments);

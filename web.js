@@ -6,6 +6,8 @@ var app = express.createServer(express.logger());
 var mongoose = require('mongoose'); // include Mongoose MongoDB library
 var schema = mongoose.Schema; 
 
+var requestURL = require('request');
+
 /************ DATABASE CONFIGURATION **********/
 app.db = mongoose.connect(process.env.MONGOLAB_URI); //connect to the mongolabs database - local server uses .env file
 
@@ -193,7 +195,7 @@ app.get('/new-entry',function(request, response){
 // receive a form submission
 app.post('/new-entry', function(request, response){
     
-    console.log('Received new blog post submission')
+    console.log('Received new blog post submission');
     console.log(request.body);
     
     // Prepare the blog post entry form into a data object
@@ -332,6 +334,7 @@ app.post("/update", function(request, response){
     // include data to update with 'updatedData'
     // extra options - this time we only want a single doc to update
     // after updating run the callback function - return err and numAffected
+    
     BlogPost.update( condition, updatedData, options, function(err, numAffected){
         
         if (err) {
@@ -350,6 +353,92 @@ app.post("/update", function(request, response){
     });
     
 });
+
+
+/*********** API & JSON EXAMPLES ************/
+
+// return all blog entries in json format
+app.get('/data/allposts', function(request, response){
+    
+    // define the fields you want to include in your json data
+    includeFields = ['title','content','urlslug','date','comments','author.name']
+    
+    // query for all blog
+    queryConditions = {}; //empty conditions - return everything
+    var query = BlogPost.find( queryConditions, includeFields);
+
+    query.sort('date',-1); //sort by most recent
+    query.exec(function (err, blogPosts) {
+
+        // render the card_form template with the data above
+        jsonData = {
+          'status' : 'OK',
+          'posts' : blogPosts
+        }
+
+        response.json(jsonData);
+    });
+});
+
+app.get('/weather', function(request, response){
+    
+    // default /weather request - redirect to /weather/NYC
+    response.redirect("/weather/nyc");
+    
+});
+
+app.get('/weather/:location', function(request, response){
+    
+    // Yahoo Where On Earth ID ( WOEID )
+    // look up more locations here http://woeid.rosselliot.co.nz/lookup/shanghai
+    YAHOOLocations = {
+        'nyc' : 2459115,
+        'berlin' : 638242,
+        'shanghai' : 2151849
+    }
+
+    requestedLocation = request.params.location.toLowerCase();
+    
+    if (requestedLocation in YAHOOLocations ) {
+        woeid = YAHOOLocations[requestedLocation];
+    } else {
+        woeid = YAHOOLocations['nyc'] // default to nyc
+    }
+    
+    // build the request URL
+    yahooWeatherURL = "http://weather.yahooapis.com/forecastjson?w=" + woeid;
+    
+    // make the request
+    requestURL(yahooWeatherURL, function(err, httpResponse, data) {
+        
+        if (err || httpResponse.statusCode != 200) {
+            console.log(err);
+            response.send("Something went wrong");
+        }
+        
+        if (httpResponse.statusCode == 200) {
+            
+            //convert JSON string into JS Object
+            weatherData = JSON.parse(data);
+            
+            console.log("-------- DATA RECEIVED -------");
+            console.log(data);
+            console.log("------------------------------");
+            
+            templateData = {
+                jsonFromYahoo : data,
+                weather : weatherData,
+                requestedURL : yahooWeatherURL, 
+                YAHOOLocations : YAHOOLocations
+            }
+            
+            response.render('weather_from_yahoo.html', templateData);
+        }
+        
+        
+    })
+    
+})
 
 
 // Make server turn on and listen at defined PORT (or port 3000 if is not defined)
