@@ -383,13 +383,18 @@ app.get('/data/allposts', function(request, response){
 // This is a demonstration of using "remote" JSON data.
 app.get('/jsontest',function(request, response) {
     
+    // define the remote JSON feed
     blogPostsURL= "http://dwd-mongodb.herokuapp.com/data/allposts"; //pretend this url is actually on another server
     
+    // make the request
     requestURL(blogPostsURL, function(error, httpResponse, data) {
+        //if there is an error
         if (error) {
             console.error(error);
             response.send("uhoh there was an error");
         }
+
+        // if successful HTTP 200 response
         if (httpResponse.statusCode == 200) {
             
             //convert JSON into native javascript
@@ -403,16 +408,14 @@ app.get('/jsontest',function(request, response) {
                     blogposts : posts, 
                     source_url : blogPostsURL   
                 }
-            
                 response.render("remote_json_example.html",templateData)
             } else {
                 
                 response.send("blog post JSON status != OK");
             }
         }
-    });
-    
-})
+    }); // end of requestURL callback
+}); //end of /jsontest route
 
 /************ YAHOO  WEATHER EXAMPLE **************/
 app.get('/weather', function(request, response){
@@ -432,8 +435,10 @@ app.get('/weather/:location', function(request, response){
         'shanghai' : 2151849
     }
 
+    // convert incoming location parameter to lowercase
     requestedLocation = request.params.location.toLowerCase();
     
+    // lookup the location in YAHOOLocations
     if (requestedLocation in YAHOOLocations ) {
         woeid = YAHOOLocations[requestedLocation];
     } else {

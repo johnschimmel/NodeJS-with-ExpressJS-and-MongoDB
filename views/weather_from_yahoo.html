@@ -11,8 +11,12 @@
         <ul>
             <li>Temperature: 
             <%= weather.condition.text %>
-            <%= weather.condition.temperature %> <%= weather.units.temperature %></li>
+            <%= weather.condition.temperature %> 
+            <%= weather.units.temperature %>
+            </li>
+
             <li>Wind speed: <%= weather.wind.speed %><%= weather.units.speed %> <%= weather.wind.direction %></li>
+
             <li>Visibility: <%= weather.atmosphere.visibility %><%= weather.units.distance %>
         </ul>
         
