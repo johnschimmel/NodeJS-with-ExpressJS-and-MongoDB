@@ -35,6 +35,8 @@ app.configure(function() {
     app.set('view engine','ejs');  // use the EJS node module
     app.set('views',__dirname+ '/views'); // use /views as template directory
     app.set('view options',{layout:true}); // use /views/layout.html to manage your main header/footer wrapping template
+    
+    app.set( "jsonp callback", true );
     app.register('html',require('ejs')); //use .html files in /views
 
     /******************************************************************
@@ -53,7 +55,7 @@ app.configure(function() {
     /**** Turn on some debugging tools ****/
     app.use(express.logger());
     app.use(express.errorHandler({ dumpExceptions: true, showStack: true }));
-
+    
 });
 /*********** END SERVER CONFIGURATION *****************/
 
@@ -477,6 +479,19 @@ app.get('/weather/:location', function(request, response){
         
         
     })
+    
+});
+
+
+// AJAX Example Page
+
+app.get("/ajax", function(request, response){
+    
+    templateData = {
+        layout:'layout_ajax.html'
+    };
+    
+    response.render("ajax_example.html", templateData);
     
 })
 
