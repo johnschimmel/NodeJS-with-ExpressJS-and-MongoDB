@@ -20,7 +20,8 @@
 
 <!-- COMMENT FORM -->
 <div class="row">
-    <div class="span6">
+    <div class="span6" id="commentsContainer">
+        
         <% if (comments.length == 0) { %>
             <b>No comments</b>
         <% } else { %>
@@ -41,7 +42,7 @@
     
     
     <div class="span6">
-        <form class="form-horizontal" method="POST" action="/comment">
+        <form class="form-horizontal" id="commentForm" method="POST" action="/comment">
             <fieldset>
                 <legend>Add a comment</legend>
 
@@ -62,6 +63,7 @@
                 <div class="form-actions">
                     <input type="hidden" value="<%= urlslug %>" name="urlslug">
                     <button type="submit" class="btn btn-primary">Comment</button>
+                    <button type="button" id="ajaxCommentBtn">Comment by AJAX</button>
                 </div>
             </fieldset>
         </form>

@@ -177,7 +177,13 @@ app.post('/comment', function(request, response){
         
         if (request.xhr) {
             
-            response.json({'status':'okie dokie'});
+            response.json({
+                status :'OK',
+                comment : {
+                    name : commentData.name,
+                    text : commentData.text
+                }
+            });
             
         } else {
             

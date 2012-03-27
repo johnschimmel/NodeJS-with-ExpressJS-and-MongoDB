@@ -24,7 +24,7 @@ var getBlogPosts = function(e) {
         
         url : jsonURL,
         dataType : 'json',
-        method : 'GET',
+        type : 'GET',
         
         success : function(data) {
             console.log("inside success callback");
