@@ -19,11 +19,95 @@ ul#flickr_container li {
         
         <br>
         
+        <p>
+            If you want to use remote JSON data, JSON that is not from your domain, the JSON feed must support JSONP. JSONP is just like JSON data but the data is wrapped in a Javascript function. For example,
+
+Make a JSONP response
+<pre>http://yoursite.herokuapp.com/data/json?callback=myFunc</pre>
+Result - JSONP response
+<pre>myFunc({'name':'Tony Pony'})</pre>
+            
+        </p>
+        <br>
+        <p>
+            The AJAX function and button click are defined in the javascript file <a href="http://dwd-mongodb.herokuapp.com/js/ajax_example.js" target="_new">ajax_example.js</a>.
+        </p>
+
+        <hr>
+        <h3>Flickr JSONP Example</h3>
         <input type="search" name="query" id="flickrQuery">
         <button id="flickrApiBtn">Get Flickr Images</button>
         
         <ul id="flickr_container"></ul>
         
+        <hr>
+
+        <!-- SAMPLE CODE -- YOU CAN IGNORE THIS -->
+        <pre>
+// When the browser has finished loading all HTML, run this.
+jQuery(document).ready( function() {
+    // when flickr button is clicked
+    jQuery("button#flickrApiBtn").click( getFlickrPhotos);
+
+});
+/***********************************
+    JSONP + Flickr Code
+************************************/
+
+var getFlickrPhotos = function() {
+    var flickrURL = "http://api.flickr.com/services/feeds/photos_public.gne?tagmode=any&format=json";
+    var query = jQuery("#flickrQuery").val();
+
+    queryURL = flickrURL + "&tags=" + query;
+
+    alert(queryURL);
+
+    // make ajax call to flickr
+    jQuery.ajax({
+
+        url : queryURL,
+        type : 'GET',
+        dataType : 'jsonp',
+        jsonp : 'jsoncallback',
+
+        success : function(response) {
+            console.log("got a response from flickr");
+            console.dir(response);
+
+            //display the photos
+            displayPhotos(response.items);
+        },
+        error : function(error) {
+            alert("uhoh something happened");
+        }
+
+
+    })
+
+}
+
+var displayPhotos = function(photosArray) {
+
+    newHTML = "";
+
+    for(i=0; i < photosArray.length; i++) {
+
+        currentPhoto = photosArray[i];
+
+        tmpHTML = "<li> \
+        <a href='"+ currentPhoto.link +"'> \
+        <img src="+ currentPhoto.media.m + "> \
+        </a><br> \
+        from " + currentPhoto.author + " \
+        </li>";
+
+        newHTML += tmpHTML;
+    }
+
+    jQuery("#flickr_container").html(newHTML); // replace current html inside #flickr_container with new image html
+
+}
+        </pre>
     </div>
 </div>
 
