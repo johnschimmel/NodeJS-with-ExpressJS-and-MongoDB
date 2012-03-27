@@ -11,7 +11,7 @@ jQuery(document).ready( function() {
         /*
         formData = {
             name : jQuery("input[name='name']").val(),
-            text : jQuery("input[name='text']").val(),
+            text : jQuery("textarea[name='text']").val(),
             urlslug : jQuery("input[name='urlslug']").val()
         }
         */
@@ -30,6 +30,9 @@ jQuery(document).ready( function() {
                     
                     console.log("comment added successfully, let's display it");
                     displayComment(response.comment);
+                    
+                    //clear the form
+                    jQuery("input[name='name'],textarea[name='text']").val('');
                     
                 }
                 

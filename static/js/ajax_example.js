@@ -2,8 +2,10 @@
 // When the browser has finished loading all HTML, run this.
 jQuery(document).ready( function() {
     
-    // when the Blog Posts Button is clicked
+    // when the Blog Posts Button is clicked -  /ajax example
     jQuery("button#BlogPostsBtn").click( getBlogPosts );
+    
+    jQuery("button#flickrApiBtn").click( getFlickrPhotos);
     
 });
 
@@ -71,4 +73,58 @@ var buildBlogPostList = function(blogpostsArray) {
     //append new html to the DOM (browser's rendered HTML)
     jQuery("#blogposts_list").append(newHTML);
 
+}
+
+/***********************************
+    JSONP + Flickr Code
+************************************/
+
+var getFlickrPhotos = function() {
+    var flickrURL = "http://api.flickr.com/services/feeds/photos_public.gne?tagmode=any&format=json";
+    var query = jQuery("#flickrQuery").val();
+    
+    queryURL = flickrURL + "&tags=" + query;
+    
+    alert(queryURL);
+    
+    // make ajax call to flickr
+    jQuery.ajax({
+        
+        url : queryURL,
+        type : 'GET',
+        dataType : 'jsonp',
+        jsonp : 'jsoncallback',
+        
+        success : function(response) {
+            console.log("got a response from flickr");
+            console.dir(response);
+
+            //display the photos
+            displayPhotos(response.items);
+        },
+        error : function(error) {
+            alert("uhoh something happened");
+        }
+        
+        
+    })
+    
+}
+
+var displayPhotos = function(photosArray) {
+    
+    newHTML = "";
+    
+    for(i=0; i < photosArray.length; i++) {
+        
+        currentPhoto = photosArray[i];
+        
+        tmpHTML = "<li> \
+        <img src="+ currentPhoto.media.m + "></li>";
+        
+        newHTML += tmpHTML;
+    }
+    
+    jQuery("#flickr_container").html(newHTML); // replace current html inside #flickr_container with new image html
+    
 }
