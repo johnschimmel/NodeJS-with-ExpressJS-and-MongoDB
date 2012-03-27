@@ -120,7 +120,11 @@ var displayPhotos = function(photosArray) {
         currentPhoto = photosArray[i];
         
         tmpHTML = "<li> \
-        <img src="+ currentPhoto.media.m + "></li>";
+        <a href='"+ currentPhoto.link +"'> \
+        <img src="+ currentPhoto.media.m + "> \
+        </a><br> \
+        from " + currentPhoto.author + " \
+        </li>";
         
         newHTML += tmpHTML;
     }
