@@ -7,6 +7,15 @@ jQuery(document).ready( function() {
     
 });
 
+
+/*************************************************
+    getBlogPosts (function)
+    -------------------------
+    Ajax request for JSON feed /data/allposts
+    Retrieves blog posts 
+    and passes them to buildBlogPostList
+*************************************************/
+
 var getBlogPosts = function(e) {
     
     var jsonURL = "/data/allposts";
@@ -34,13 +43,13 @@ var getBlogPosts = function(e) {
 } // end of getBlogPosts
 
 
-/*                          
-    buildBlogPostList
+/*************************************************
+    buildBlogPostList (function)
     -------------------------
     Accepts an array of blog posts
     Builds the HTML to display link and title
     Appends HTML to <ul id="blogposts_list"></ul>
-*/
+*************************************************/
 var buildBlogPostList = function(blogpostsArray) {
     
     // newHTML will be populated with html and appended to the 

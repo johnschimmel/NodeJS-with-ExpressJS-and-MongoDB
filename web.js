@@ -175,8 +175,16 @@ app.post('/comment', function(request, response){
         post.comments.push(comment);
         post.save();
         
-        // redirect to the blog entry
-        response.redirect('/entry/' + urlslug);
+        if (request.xhr) {
+            
+            response.json({'status':'okie dokie'});
+            
+        } else {
+            
+            // redirect to the blog entry
+            response.redirect('/entry/' + urlslug);
+
+        }
 
     });
     
@@ -484,14 +492,30 @@ app.get('/weather/:location', function(request, response){
 
 
 // AJAX Example Page
-
 app.get("/ajax", function(request, response){
     
+    // use the layout --> layout_ajax.html, includes the ajax_example.js script
     templateData = {
         layout:'layout_ajax.html'
     };
     
+    //render the template 
     response.render("ajax_example.html", templateData);
+    
+});
+
+
+
+// AJAX JSONP Example
+app.get("/jsonp", function(request, response){
+    
+    // use the layout --> layout_ajax.html, includes the ajax_example.js script
+    templateData = {
+        layout:'layout_ajax.html'
+    };
+    
+    //render the template 
+    response.render("ajax_jsonp_example.html", templateData);
     
 })
 
