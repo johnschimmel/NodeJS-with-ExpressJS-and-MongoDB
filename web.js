@@ -7,7 +7,7 @@ var mongoose = require('mongoose'); // include Mongoose MongoDB library
 var schema = mongoose.Schema; 
 
 var requestURL = require('request');
-
+var moment = require('moment');
 /************ DATABASE CONFIGURATION **********/
 app.db = mongoose.connect(process.env.MONGOLAB_URI); //connect to the mongolabs database - local server uses .env file
 
@@ -84,7 +84,17 @@ app.get('/', function(request, response) {
     
 });
 // end of main page
-
+app.get('/testembed', function(req, res){
+    
+    BlogPost.findById('4f55bf0ad579ec0100000002', function(err, blogpost){
+        blogpost.comments.id('4f67b90776dd2e010000001a').text = "tuna fish sandwich";
+        blogpost.save();
+        
+        comment = blogpost.comments.id('4f67b90776dd2e010000001a')
+        res.json(comment._id);
+    })
+    
+});
 
 // Display a single blog post
 app.get('/entry/:urlslug',function(request, response){
@@ -395,6 +405,26 @@ app.get('/data/allposts', function(request, response){
         response.json(jsonData);
     });
 });
+
+app.get('/simplejson', function(request, response){
+    
+    data = {
+        "offset" : "0",
+        "results" : [
+        {
+        "body": "Article Body",
+        "date" : "Article Data",
+        "title" : "Article Title",
+        "url" :"Article URL"
+        }
+        ],
+        "tokens" : ["O", "J", "Simpson"],
+        "total": 2218
+    };
+    
+    response.json(data);
+    
+})
 
 // This is a demonstration of using "remote" JSON data.
 app.get('/jsontest',function(request, response) {

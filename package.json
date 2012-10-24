@@ -5,6 +5,7 @@
     "express": "2.5.6",
     "ejs" : "latest",
     "mongoose" : "2.5.6",
-    "request" : "2.9.153"
+    "request" : "2.9.153",
+    "moment" : "1.5.0"
   }
 }
